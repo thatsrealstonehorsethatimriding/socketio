@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Socket.IO Example</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <form id="mesajForm" action="http://localhost:3000/">
+        <input type="text" id="mesajInput" placeholder="Enter your message">
+        <button type="submit" id="gonderButton">Mesajı Gönder</button>
+    </form>
+    <ul id="mesajListesi"></ul>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+        const socket = io.connect('http://localhost:3000/');
+        document.getElementById('gonderButton').addEventListener('click', () => {
+            const mesajInput = document.getElementById('mesajInput');
+            const mesaj = mesajInput.value;
+            mesajInput.value = '';
+            socket.emit('sendMessage', mesaj);
+        });
+
+        socket.on('mesajGeldi', (mesaj) => {
+            const mesajListesi = document.getElementById('mesajListesi');
+            const li = document.createElement('li');
+            li.textContent = mesaj;
+            mesajListesi.appendChild(li);
+        });
+    </script>
+</body>
+
+</html>
